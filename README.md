@@ -8,3 +8,5 @@
 ![https://github.com/sdcuike/issueBlog/blob/master/images/autoGenerate.png?raw=true](https://github.com/sdcuike/issueBlog/blob/master/images/autoGenerate.png?raw=true)
 
 - 自动生成的项目地址 [https://gitlab.com/kecui/demos.git](https://gitlab.com/kecui/demos.git)
+
+![https://github.com/sdcuike/issueBlog/blob/master/images/autoGen1.png?raw=true](https://github.com/sdcuike/issueBlog/blob/master/images/autoGen1.png?raw=true)
