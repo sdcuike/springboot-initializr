@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Spring boot Initializr</title>
+
+    <link rel="stylesheet" href="css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css"/>
+    <link rel="stylesheet" href="/css/spring.css"/>
+    <script src="js/jquery.js"></script>
+</head>
+
+<body>
+
+<h1 style="text-align: center">项目自动生成器</h1>
+
+<div class="container-fluid">
+
+    <form id="generateForm" method="post">
+        <div>
+            <label>
+                <h2>maven配置</h2>
+            </label><br/>
+        </div>
+
+        <div>
+            <label>groupId:</label><br/>
+            <input type="text" class="projectInfoGroupId" value="{{projectInfo.groupId}}"><br/>
+        </div>
+
+        <label>artifactId:</label><br/>
+        <input type="text" class="projectInfoArtifactId" value="{{projectInfo.artifactId}}"><br/>
+
+        <label>name:</label>
+
+        <input type="text" class="projectInfoName" value="{{projectInfo.name}}"><br/>
+
+        <label>description:</label><br/>
+        <input type="text" class="projectInfoDescription" value="{{projectInfo.description}}"><br/>
+
+        <label>项目包名:</label><br/>
+        <input type="text" class="projectInfoPackageName" value="{{projectInfo.packageName}}"><br/>
+
+
+        <label>
+            <h2>git 仓库空间配置</h2>
+        </label>
+        <select class="projectInfoGitNameSpaces">
+            {{#projectInfo.gitNameSpaces}}
+                <option value="{{id}}">{{name}}</option>
+            {{/projectInfo.gitNameSpaces}}
+        </select>
+
+        <br>
+
+        <h2>项目依赖勾选</h2>
+        <br>
+        {{#projectInfo.dependencieList}}
+            <h4>{{type}}</h4>
+            {{#dependencys}}
+            <br>
+            <input type="checkbox" class="projectInfoDependencies" value="{{alias}}"> {{alias}}
+            <br>
+            <label>{{description}}</label>
+             {{/dependencys}}
+        {{/projectInfo.dependencieList}}
+        <br>
+
+        <div class="submitButton">
+            <button type="submit">在gitlab上生成项目</button>
+        </div>
+        <div style="color: #e38d13;font-size: xx-large">
+            生成项目地址:<label class="projectInfoGitUrl">... ...</label>
+        </div>
+    </form>
+
+
+</div>
+
+<script>
+    jQuery(document).ready(function ($) {
+
+        $("#generateForm").submit(function (event) {
+            // Prevent the form from submitting via the browser.
+
+            event.preventDefault();
+            display("耐心等待... ... ... ...");
+            searchViaAjax();
+
+        });
+
+    });
+
+    function searchViaAjax() {
+        $(".submitButton").hide();
+        var data = {}
+        data["groupId"] = $(".projectInfoGroupId").val();
+        data["artifactId"] = $(".projectInfoArtifactId").val();
+        data["name"] = $(".projectInfoName").val();
+        data["description"] = $(".projectInfoDescription").val();
+        data["packageName"] = $(".projectInfoPackageName").val();
+
+        var gitNameSpace = {};
+
+        gitNameSpace["id"] = $(".projectInfoGitNameSpaces").val();
+        gitNameSpace["name"] = $(".projectInfoGitNameSpaces").find("option:selected").text();
+        data["gitNameSpace"] = gitNameSpace;
+
+        var dependencies = [];
+        $('.projectInfoDependencies:checked').each(function (index, item) {
+            var dependencie = {};
+            dependencie["alias"] = $(this).val();
+            dependencies.push(dependencie);
+        });
+
+        data["dependencies"] = dependencies;
+
+        $.ajax({
+            type: "POST",
+            contentType: "application/json",
+            url: "/generate",
+            data: JSON.stringify(data),
+            dataType: 'text',
+            timeout: 100000,
+            success: function (data) {
+                console.log("SUCCESS: ", data);
+
+                display(data);
+            },
+            error: function (e) {
+                console.log("ERROR: ", e);
+                var error = JSON.parse(e.responseText);
+                display(error.message);
+            },
+            done: function (e) {
+                console.log("DONE");
+            }
+        });
+
+    }
+
+
+    function display(data) {
+        $('.projectInfoGitUrl').html(data);
+        $(".submitButton").show();
+    }
+</script>
+
+
+</body>
+
+</html>
