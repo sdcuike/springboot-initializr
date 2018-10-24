@@ -6,3 +6,5 @@
 - 项目使用了org.eclipse.jgit，本地安装git，并设置SSH key
 
 ![https://github.com/sdcuike/issueBlog/blob/master/images/autoGenerate.png?raw=true](https://github.com/sdcuike/issueBlog/blob/master/images/autoGenerate.png?raw=true)
+
+- 自动生成的项目地址 [https://gitlab.com/kecui/demos.git](https://gitlab.com/kecui/demos.git)
